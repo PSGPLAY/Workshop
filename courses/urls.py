@@ -6,7 +6,8 @@ app_name='courses'
 urlpatterns = [
     path('', views.course_display, name='course_display'),
     path('courses/', views.courses, name='courses'),
-    path('course-details/', views.course_details, name='course_details'),
+    path('course-details/<int:id>', views.course_details, name='course_details'),
     path('index/', views.index, name='index'),
-    path('add_course/', views.add_course, name='add_course')
+    path('add_course/', views.add_course, name='add_course'),
+    path('course/delete_course/<int:course_id>', views.delete_course, name='delete_course'),
 ]

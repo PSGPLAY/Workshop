@@ -4,7 +4,6 @@
 {% block content %}
   <!-- ===== Page content ===== -->
   <main>
-    <p><a href="courses.html">&larr; Back to all courses</a></p>
 
     <div class="card card-pad" style="margin-top:16px;">
       <div class="details-head">
@@ -33,8 +32,19 @@
 
       <div class="form-actions">
         <a href="add-course.html" class="btn btn-primary">Edit Course</a>
-        <button class="btn btn-danger" data-delete="Introduction to Programming">Delete Course</button>
-        <a href="courses.html" class="btn btn-ghost">Back to List</a>
+
+        <form 
+        method="POST"
+        action="{% url 'courses:delete_course' course_id=course.id %}"
+        style="display:inline;"
+        onsubmit="return confirm('Are you sure you want to delete {{ course.name }}?');"
+        >
+
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Delete Course</button>
+      
+      </form>
+        <a href="{% url 'courses:courses' %}" class="btn btn-ghost">Back to List</a>
       </div>
     </div>
   </main>

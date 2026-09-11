@@ -22,7 +22,7 @@
     <div class="header-top">
 
       <!-- ===== Brand ===== -->
-      <a class="brand" href="{% url 'home_page' %}">
+      <a class="brand" href="{% url 'home:home' %}">
 
         <span class="brand-mark">
           MMAMC
@@ -59,7 +59,7 @@
           </strong>
 
           <a href="{% url 'accounts:logout' %}" class="logout-link">
-            Sign Out
+            Logout
           </a>
 
         {% else %}
@@ -82,7 +82,7 @@
     <!-- ===== Navigation ===== -->
     <nav class="catalog-tabs">
 
-      <a href="{% url 'home_page' %}"
+      <a href="{% url 'home:home' %}"
          data-tab="home">
         Home
       </a>
@@ -143,7 +143,7 @@
 
       <span class="footer-links">
 
-        <a href="{% url 'home_page' %}">
+        <a href="{% url 'home:home' %}">
           Home
         </a>
 

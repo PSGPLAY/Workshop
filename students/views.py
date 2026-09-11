@@ -1,13 +1,14 @@
 from datetime import datetime
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import Student
+from .models import Student, Enrollment
+from .forms import StudentForm, EnrollmentForm
 from .serializers import StudentSerializer
 
 
@@ -19,127 +20,115 @@ def students_about(request):
     return render(request, 'about.html')
 
 
-students = [
-    {
-        "student_id": 1,
-        "name": "Kaushal Karn",
-        "age": 20,
-        "grade": "A",
-        "course": "Computer Science"
-    },
-    {
-        "student_id": 2,
-        "name": "John Doe",
-        "age": 22,
-        "grade": "B",
-        "course": "Mathematics"
-    },
-    {
-        "student_id": 3,
-        "name": "Harry Potter",
-        "age": 20,
-        "grade": "A",
-        "course": "Computer Science"
-    },
-    {
-        "student_id": 4,
-        "name": "Jane Smith",
-        "age": 19,
-        "grade": "B",
-        "course": "Physics"
-    }
-]
-
-
-def student_display(request):
-    """
-    Returns the old hard-coded student data as JSON.
-    """
-    return JsonResponse(students, safe=False)
-
-
-def student_detail_old(request, student_id):
-    """
-    Finds a student from the old hard-coded list.
-    This is kept only if you still need the old API example.
-    """
-
-    for student in students:
-        if student["student_id"] == student_id:
-            return JsonResponse(student)
-
-    return HttpResponse("Student not found.")
-
 def student_list(request):
-    """
-    Displays all students from the database.
-    """
-
     students = Student.objects.all()
-
-    context = {
-        'page_title': 'Student List',
-        'students': students,
-        'total_students': students.count(),
-        'current_date': datetime.now(),
-        'user': request.user,
-    }
 
     return render(
         request,
-        'students/student_list.html',
-        context
+        "students/student_list.html",
+        {"students": students}
     )
 
-
 def student_detail(request, student_id):
-    """
-    Displays one student from the database.
-
-    Example:
-        /students/student/1/
-    """
 
     student = get_object_or_404(
         Student,
         id=student_id
     )
 
-    context = {
-        'student': student,
-    }
+    if request.method == "POST":
+
+        enrollment_form = EnrollmentForm(
+            request.POST,
+            student=student
+        )
+
+        if enrollment_form.is_valid():
+
+            enrollment = enrollment_form.save(commit=False)
+
+            enrollment.student = student
+
+            enrollment.save()
+
+            return redirect(
+                "students:student_details",
+                student_id=student.id
+            )
+
+    else:
+
+        enrollment_form = EnrollmentForm(
+            student=student
+        )
 
     return render(
         request,
-        'students/student_detail.html',
-        context
+        "students/student_details.html",
+        {
+            "student": student,
+            "enrollment_form": enrollment_form,
+        }
     )
 
 
 
 def index(request):
+    students = Student.objects.all()
+
+    active_students = students.filter(status="active")
+    inactive_students = students.filter(status="inactive")
+
+    departments = students.values("department").distinct()
+
+    context = {
+        "students": students,
+        "total_student": students.count(),
+        "active_student": active_students.count(),
+        "inactive_student": inactive_students.count(),
+        "departments": departments.count(),
+    }
+
     return render(
         request,
-        'students/index.html'
+        "students/index.html",
+        context
     )
+
 
 def add_student(request):
 
-    Student.objects.create(
-        student_id=12,
-        first_name='sheloi',
-        last_name='syadav',
-        email='saon1i12q3@gmail.com',
-        phone='9876542222',
-        date_of_birth='2006-05-23',
-        department='csit',
-        semester='spring 2026',
-        status='active',
-        address='morang',
-        notes='django'
-    )
+    if request.method == "POST":
+
+        form = StudentForm(request.POST)
+
+        if form.is_valid():
+
+            student = form.save()
+
+            return redirect(
+                "students:student_details",
+                student_id=student.id
+            )
+
+    else:
+
+        form = StudentForm()
 
     return render(
         request,
-        'students/add_student.html'
+        "students/add_student.html",
+        {
+            "form": form
+        }
     )
+
+
+def delete_student(request, student_id):
+    student = get_object_or_404(Student, id= student_id)
+
+    if request.method == "POST":
+        student.delete()
+        return redirect("students:student_list")
+
+    return render(request, "students/delete_student.html", {"student": student})

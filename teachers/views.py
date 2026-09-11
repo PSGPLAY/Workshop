@@ -1,24 +1,79 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Teacher
+from .forms import TeacherForm
 
-# Create your views here.
-from django.shortcuts import render
-from django.http import HttpResponse
-
-from teachers.models import Teacher
-
-# Create your views here.
 
 def teachers_list(request):
-    return render(request, 'teachers/teacher_list.html')
+    teachers = Teacher.objects.all()
 
-def teachers_detail(request):
-    return render(request, 'teachers/teacher_detail.html')
+    return render(
+        request,
+        "teachers/teacher_list.html",
+        {"teachers": teachers}
+    )
+
+
+def teachers_detail(request, id):
+    teacher = get_object_or_404(Teacher, id=id)
+
+    return render(
+        request,
+        "teachers/teacher_detail.html",
+        {"teacher": teacher}
+    )
+
 
 def teachers_home(request):
-    return render(request, 'teachers/home.html')
+    return render(
+        request,
+        "teachers/home.html"
+    )
+
 
 def index(request):
-    return render(request, 'teachers/index.html')
+    teachers_list = Teacher.objects.all()
+
+    active_teacher = teachers_list.filter(status="active")
+    inactive_teacher = teachers_list.filter(status="inactive")
+    departments = Teacher.objects.values("department").distinct()
+
+    context = {
+        "teachers": teachers_list,
+        "total_teacher": teachers_list.count(),
+        "active_teacher": active_teacher.count(),
+        "inactive_teacher": inactive_teacher.count(),
+        "departments": departments.count(),
+    }
+
+    return render(
+        request,
+        "teachers/index.html",
+        context
+    )
+
 
 def add_teacher(request):
-    return render(request, 'teachers/add_teacher.html')
+    if request.method == "POST":
+        form = TeacherForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("teachers:teachers")
+
+    else:
+        form = TeacherForm()
+
+    return render(
+        request,
+        "teachers/add_teacher.html",
+        {"form": form}
+    )
+
+def delete_teacher(request, teacher_id):
+    teacher = get_object_or_404(Teacher, id=teacher_id)
+
+    if request.method == "POST":
+        teacher.delete()
+        return redirect("teachers:teachers")
+
+    return render(request, "teachers/delete_teacher.html", {"teacher":teacher})

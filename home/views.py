@@ -9,12 +9,8 @@ from django.shortcuts import render, redirect
 from home.forms import ProfileForm
 from .models import Profile
 
-@login_required
-def home(request):
-    return HttpResponse("Hello World")
 
-
-@login_required
+# @login_required
 def home_page(request):
     return render(request,'home/home.html')
 
@@ -22,7 +18,7 @@ def home_page(request):
 def about(request):
     return HttpResponse("This is a simple Django app for managing students.")
 
-@login_required
+# @login_required
 def profile_create(request):
     profile, created = Profile.objects.get_or_create(
         user=request.user

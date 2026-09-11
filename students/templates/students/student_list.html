@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Student List · Greenfield School{% endblock %}
+{% block title %}
+Student List · Greenfield School
+{% endblock %}
 
-{% block page %}students{% endblock %}
+{% block page %}
+students
+{% endblock %}
 
 {% block content %}
 
-<!-- ===== Page content ===== -->
-<main>
 
+<main>
   <div class="page-head">
     <div>
       <p class="eyebrow">Student records</p>
       <h1>All Students</h1>
-      <p class="lede">
-        Browse, search and manage every student on record.
-      </p>
+      <p class="lede">Browse, search and manage every student on record.</p>
     </div>
 
     <a href="{% url 'students:add_student' %}" class="btn btn-primary">
@@ -23,19 +24,16 @@
     </a>
   </div>
 
-
-  <!-- ===== Search & Filters ===== -->
+  <!-- Search & Filters -->
   <div class="toolbar">
-
     <input
       type="search"
       id="student-search-input"
       class="search-input"
       placeholder="Search by ID, name or email…"
-    >
+    />
 
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-
+    <div style="display: flex; gap: 10px; flex-wrap: wrap">
       <select id="student-dept-filter" class="filter-select">
         <option value="">All departments</option>
         <option value="Computer Science">Computer Science</option>
@@ -50,18 +48,15 @@
         <option value="">All statuses</option>
         <option value="active">Active</option>
         <option value="inactive">Inactive</option>
+        <option value="graduated">Graduated</option>
+        <option value="suspended">Suspended</option>
       </select>
-
     </div>
-
   </div>
 
-
-  <!-- ===== Student Table ===== -->
+  <!-- Student Table -->
   <div class="table-wrap">
-
     <table class="catalog">
-
       <thead>
         <tr>
           <th>Student ID</th>
@@ -70,89 +65,82 @@
           <th>Semester</th>
           <th>Email</th>
           <th>Status</th>
-          <th></th>
+          <th>Actions</th>
         </tr>
       </thead>
 
       <tbody id="students-body">
-
-        <!-- Student 1 -->
-
-        {% for stu in students %}
+        {% for student in students %}
 
         <tr
-          data-search="stu-001 john anderson john.anderson@greenfield.edu"
-          data-dept="Computer Science"
-          data-status="active"
+          data-search="{{ student.student_id }} {{ student.first_name }} {{ student.last_name }} {{ student.email }}"
+          data-dept="{{ student.department }}"
+          data-status="{{ student.status }}"
         >
-
+          <!-- Student ID -->
           <td data-label="Student ID">
-            <a href="{% url 'students:student_details' stu.id %}">
-              <span class="stamp">{{ stu.student_id}}</span>
+            <a href="{% url 'students:student_details' student.id %}">
+              <span class="stamp"> {{ student.student_id }} </span>
             </a>
           </td>
 
+          <!-- Student Name -->
           <td data-label="Student Name" class="course-name">
             <a
-              href="{% url 'students:student_details' stu.id %}"
-              style="color:inherit; text-decoration:none;"
+              href="{% url 'students:student_details' student.id %}"
+              style="color: inherit; text-decoration: none"
             >
-              {{ stu.first_name}} {{ stu.last_name}}
+              {{ student.first_name }} {{ student.last_name }}
             </a>
           </td>
 
+          <!-- Department -->
           <td data-label="Department" class="course-dept">
-            {{ stu.department}}
+            {{ student.department }}
           </td>
 
-          <td data-label="Semester">
-            {{ stu.semester}}
-          </td>
+          <!-- Semester -->
+          <td data-label="Semester">{{ student.semester }}</td>
 
-          <td data-label="Email">
-            {{ stu.email}}
-          </td>
+          <!-- Email -->
+          <td data-label="Email">{{ student.email }}</td>
 
+          <!-- Status -->
           <td data-label="Status">
-            <span class="pill active">{{ stu.status}}</span>
+            <span class="pill {{ student.status }}">
+              {{ student.get_status_display }}
+            </span>
           </td>
 
-          <td data-label="">
+          <!-- Actions -->
+          <td data-label="Actions">
             <div class="row-actions">
               <a
                 class="btn btn-ghost btn-sm"
-                href="add-student.html"
+                href="{% url 'students:student_details' student.id %}"
               >
-                Edit
+                View
               </a>
-
-              <button
-                class="btn btn-danger btn-sm"
-                data-delete="John Anderson"
-              >
-                Delete
-              </button>
             </div>
           </td>
+        </tr>
 
+        {% empty %}
+
+        <tr>
+          <td colspan="7">No students found.</td>
         </tr>
 
         {% endfor %}
-
       </tbody>
-
     </table>
 
-    <!-- ===== Empty State ===== -->
-    <div class="empty-state" id="student-empty-state" style="display:none;">
+    <!-- Empty Search State -->
+    <div class="empty-state" id="student-empty-state" style="display: none">
       <h3>No students match</h3>
-      <p>
-        Try a different search term or clear the filters.
-      </p>
+      <p>Try a different search term or clear the filters.</p>
     </div>
-
   </div>
-
 </main>
 
 {% endblock %}

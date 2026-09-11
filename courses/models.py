@@ -1,6 +1,5 @@
 from django.db import models
 from teachers.models import Teacher
-from django.db import models
 
 
 class Course(models.Model):

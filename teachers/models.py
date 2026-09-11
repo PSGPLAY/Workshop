@@ -8,6 +8,11 @@ class Teacher(models.Model):
         ("on_leave", "On Leave"),
     ]
 
+    teacher_id = models.CharField(max_length=30,unique=True)
+
+    subject = models.CharField(max_length=100, default="Not Assigned")
+
+
     first_name = models.CharField(max_length=80)
     last_name = models.CharField(max_length=80)
     email = models.EmailField(unique=True)

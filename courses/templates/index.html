@@ -89,7 +89,7 @@
           {% for course in courses %}
           <tr>
             <td data-label="Code">
-              <a href="{% url 'courses:course_details' %}">
+              <a href="{% url 'courses:course_details' course.id  %}">
               <span class="stamp">{{ course.code }}</span>
               </a>
             </td>

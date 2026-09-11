@@ -1,89 +1,308 @@
 {% extends 'base.html' %}
-{% block title %}Add Teacher · Teacher Directory · Greenfield School{% endblock %}
-{% block page %}add-teacher{% endblock %}
+
+{% block title %}
+Add Teacher · Teacher Directory · Greenfield School
+{% endblock %}
+
+{% block page %}
+add-teacher
+{% endblock %}
 
 {% block content %}
 
 <main>
+
   <div class="page-head">
     <div>
       <p class="eyebrow">New entry</p>
+
       <h1>Add a Teacher</h1>
-      <p class="lede">Fill in the details below to add a new teacher to the directory. This is a demo form — submitting
-        does not save the data.</p>
+
+      <p class="lede">
+        Fill in the details below to add a new teacher to the directory.
+      </p>
     </div>
   </div>
+
+
   <div class="card card-pad">
-    <form id="teacher-form" novalidate>
+
+    <form id="teacher-form" method="POST" novalidate>
+
+      {% csrf_token %}
+
       <div class="form-grid">
+
+
+        <!-- Teacher ID -->
         <div class="field">
-          <label for="first_name">First name</label>
-          <input type="text" id="first_name" placeholder="e.g. Alan" required>
+
+          <label for="{{ form.teacher_id.id_for_label }}">
+            Teacher ID
+          </label>
+
+          {{ form.teacher_id }}
+
+          {% if form.teacher_id.errors %}
+            <div class="field-error">
+              {{ form.teacher_id.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- First Name -->
         <div class="field">
-          <label for="last_name">Last name</label>
-          <input type="text" id="last_name" placeholder="e.g. Whitfield" required>
+
+          <label for="{{ form.first_name.id_for_label }}">
+            First name
+          </label>
+
+          {{ form.first_name }}
+
+          {% if form.first_name.errors %}
+            <div class="field-error">
+              {{ form.first_name.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Last Name -->
         <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="e.g. alan.whitfield@greenfield.edu" required>
+
+          <label for="{{ form.last_name.id_for_label }}">
+            Last name
+          </label>
+
+          {{ form.last_name }}
+
+          {% if form.last_name.errors %}
+            <div class="field-error">
+              {{ form.last_name.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Email -->
         <div class="field">
-          <label for="phone">Phone</label>
-          <input type="tel" id="phone" placeholder="e.g. +1 555 123 4567">
+
+          <label for="{{ form.email.id_for_label }}">
+            Email
+          </label>
+
+          {{ form.email }}
+
+          {% if form.email.errors %}
+            <div class="field-error">
+              {{ form.email.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Phone -->
         <div class="field">
-          <label for="department">Department</label>
-          <input type="text" id="department" placeholder="e.g. Computer Science" required>
+
+          <label for="{{ form.phone.id_for_label }}">
+            Phone
+          </label>
+
+          {{ form.phone }}
+
+          {% if form.phone.errors %}
+            <div class="field-error">
+              {{ form.phone.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Department -->
         <div class="field">
-          <label for="position">Position</label>
-          <input type="text" id="position" placeholder="e.g. Professor" required>
+
+          <label for="{{ form.department.id_for_label }}">
+            Department
+          </label>
+
+          {{ form.department }}
+
+          {% if form.department.errors %}
+            <div class="field-error">
+              {{ form.department.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Subject -->
         <div class="field">
-          <label for="qualification">Qualification</label>
-          <input type="text" id="qualification" placeholder="e.g. Ph.D. in Computer Science" required>
+
+          <label for="{{ form.subject.id_for_label }}">
+            Subject
+          </label>
+
+          {{ form.subject }}
+
+          {% if form.subject.errors %}
+            <div class="field-error">
+              {{ form.subject.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Position -->
         <div class="field">
-          <label for="experience">Experience</label>
-          <input type="number" id="experience" min="0" max="60" placeholder="e.g. 8" required>
-          <span class="field-hint">Enter the number of years of teaching experience.</span>
+
+          <label for="{{ form.position.id_for_label }}">
+            Position
+          </label>
+
+          {{ form.position }}
+
+          {% if form.position.errors %}
+            <div class="field-error">
+              {{ form.position.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Qualification -->
         <div class="field">
-          <label for="joining_date">Joining date</label>
-          <input type="date" id="joining_date" required>
+
+          <label for="{{ form.qualification.id_for_label }}">
+            Qualification
+          </label>
+
+          {{ form.qualification }}
+
+          {% if form.qualification.errors %}
+            <div class="field-error">
+              {{ form.qualification.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Experience -->
         <div class="field">
-          <label for="status">Status</label>
-          <select id="status" required>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="on_leave">On Leave</option>
-          </select>
+
+          <label for="{{ form.experience.id_for_label }}">
+            Experience
+          </label>
+
+          {{ form.experience }}
+
+          <span class="field-hint">
+            Enter the number of years of teaching experience.
+          </span>
+
+          {% if form.experience.errors %}
+            <div class="field-error">
+              {{ form.experience.errors }}
+            </div>
+          {% endif %}
+
         </div>
 
+
+        <!-- Joining Date -->
+        <div class="field">
+
+          <label for="{{ form.joining_date.id_for_label }}">
+            Joining date
+          </label>
+
+          {{ form.joining_date }}
+
+          {% if form.joining_date.errors %}
+            <div class="field-error">
+              {{ form.joining_date.errors }}
+            </div>
+          {% endif %}
+
+        </div>
+
+
+        <!-- Status -->
+        <div class="field">
+
+          <label for="{{ form.status.id_for_label }}">
+            Status
+          </label>
+
+          {{ form.status }}
+
+          {% if form.status.errors %}
+            <div class="field-error">
+              {{ form.status.errors }}
+            </div>
+          {% endif %}
+
+        </div>
+
+
+        <!-- Biography -->
         <div class="field span-2">
-          <label for="bio">Biography</label>
-          <textarea id="bio"
-            placeholder="Short summary of the teacher's background, interests, and teaching experience…"></textarea>
-          <span class="field-hint">A sentence or two is enough — this can be shown on the teacher detail page.</span>
+
+          <label for="{{ form.bio.id_for_label }}">
+            Biography
+          </label>
+
+          {{ form.bio }}
+
+          <span class="field-hint">
+            A sentence or two is enough — this can be shown on the
+            teacher detail page.
+          </span>
+
+          {% if form.bio.errors %}
+            <div class="field-error">
+              {{ form.bio.errors }}
+            </div>
+          {% endif %}
+
         </div>
+
+
       </div>
 
+
+      <!-- Form buttons -->
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Save Teacher</button>
-        <a href="teachers.html" class="btn btn-ghost">Cancel</a>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >
+          Save Teacher
+        </button>
+
+        <a
+          href="{% url 'teachers:teachers' %}"
+          class="btn btn-ghost"
+        >
+          Cancel
+        </a>
+
       </div>
+
     </form>
+
   </div>
 
-</main> {% endblock %}
+</main>
+
+{% endblock %}

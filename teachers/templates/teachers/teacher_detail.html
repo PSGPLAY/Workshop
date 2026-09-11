@@ -6,10 +6,6 @@
 <!-- ===== Page content ===== -->
 <main>
 
-  <p>
-    <a href="{% url 'teachers:teachers' %}">&larr; Back to all teachers</a>
-  </p>
-
   <div class="card card-pad" style="margin-top:16px;">
 
     <div class="details-head">
@@ -157,12 +153,17 @@
         Edit Teacher
       </a>
 
-      <button
-        class="btn btn-danger"
-        data-delete="Dr. Alan Whitfield">
-        Delete Teacher
-      </button>
+      <form
+      method="POST"
+      action="{% url 'teachers:delete_teacher' teacher_id=teacher.id %}"
+      style="display:inline;"
+      onsubmit="return confirm('Are you sure you want to delete {{ teacher.name }}?');"
+      >
 
+    {% csrf_token %}
+      <button class="btn btn-danger" type="submit">Delete Teacher</button>
+
+    </form>
       <a href="{% url 'teachers:teachers' %}" class="btn btn-ghost">
         Back to List
       </a>
