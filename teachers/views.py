@@ -77,3 +77,19 @@ def delete_teacher(request, teacher_id):
         return redirect("teachers:teachers")
 
     return render(request, "teachers/delete_teacher.html", {"teacher":teacher})
+
+
+def update_teacher(request, teacher_id):
+    teacher = get_object_or_404(Teacher, id=teacher_id)
+
+    if request.method == "POST":
+        form = TeacherForm(request.POST, instance=teacher)
+        if form.is_valid():
+            form.save()
+            return redirect("teachers:teacher_detail", id=teacher.id)
+    else:
+        form=TeacherForm(instance=teacher)
+
+    return render(request, "teachers/add_teacher.html", {"form":form, "teacher":teacher})
+
+

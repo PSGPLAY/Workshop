@@ -72,7 +72,6 @@ def student_detail(request, student_id):
     )
 
 
-
 def index(request):
     students = Student.objects.all()
 
@@ -131,4 +130,18 @@ def delete_student(request, student_id):
         student.delete()
         return redirect("students:student_list")
 
-    return render(request, "students/delete_student.html", {"student": student})
+    return render(request, "students/delete_student.html", {"student":student})
+
+def update_student(request, student_id):
+    student = get_object_or_404(Student, id = student_id)
+
+    if request.method == "POST":
+        form = StudentForm(request.POST, instance=student)
+
+        if form.is_valid():
+            form.save()
+            return redirect("students:student_details", student_id=student.id)
+        else:
+            form = StudentForm(instance=student)
+
+    return render(request, "students/add_student.html", {"form":form,"student":student})

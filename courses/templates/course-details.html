@@ -31,7 +31,9 @@
       </div>
 
       <div class="form-actions">
-        <a href="add-course.html" class="btn btn-primary">Edit Course</a>
+        <a
+        href="{% url 'courses:update_course' course_id=course.id %}" class="btn btn-ghost"
+        >Update Course</a>
 
         <form 
         method="POST"

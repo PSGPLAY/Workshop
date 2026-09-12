@@ -242,9 +242,20 @@
 
     <div class="form-actions">
 
-      <a href="#" class="btn btn-primary">
-        Edit Student
-      </a>
+      <form
+      method="POST"
+      action="{% url 'students:update_student' student_id=student.id %}"
+      style="display: inline;"
+      onsubmit="return confirm('Are you sure you want to update {{ student.name }} data?');"
+      >
+        {% csrf_token %}
+        <button
+          class="btn btn-primary"
+          type="submit">
+          Update Student
+        </button>
+    
+      </form>
 
 
       <form

@@ -68,3 +68,18 @@ def delete_course(request, course_id):
         return redirect("courses:courses")
 
     return render(request, "courses/delete_course.html", {"course": course})
+
+
+def update_course(request, course_id):
+    course = get_object_or_404(Course, id= course_id)
+
+    if request.method == "POST":
+        form = CourseForm(request.POST, instance=course)
+
+        if form.is_valid():
+            form.save()
+            return redirect("courses:course_details", course_id=course.id)
+    else:
+        form = CourseForm(instance=course)
+
+    return render(request, "add_course.html", {"form":form, "course":course})

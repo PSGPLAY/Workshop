@@ -149,9 +149,13 @@
     <!-- ===== Actions ===== -->
     <div class="form-actions">
 
-      <a href="add-teacher.html" class="btn btn-primary">
-        Edit Teacher
+      <a
+          href="{% url 'teachers:update_teacher' teacher_id=teacher.id %}"
+          class="btn btn-ghost"
+      >
+          Update Teacher
       </a>
+
 
       <form
       method="POST"
