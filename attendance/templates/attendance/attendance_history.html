@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+
+{% block title %}Attendance History · MMAMC{% endblock %}
+
+{% block page %}attendance{% endblock %}
+
+{% block content %}
+
+<main>
+
+    <!-- Page Header -->
+    <div class="page-head">
+
+        <div>
+
+            <p class="eyebrow">
+                Registrar · Attendance
+            </p>
+
+            <h1>
+                Attendance History
+            </h1>
+
+            <p class="lede">
+                Review attendance records from previous classes and dates.
+            </p>
+
+        </div>
+
+        <div>
+
+            <a
+                href="{% url 'attendance:take_attendance' %}"
+                class="btn btn-primary"
+            >
+                + Take Attendance
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Filters -->
+    <div class="toolbar">
+
+        <form
+            method="GET"
+            style="
+                display:flex;
+                gap:12px;
+                flex-wrap:wrap;
+                align-items:center;
+            "
+        >
+
+            <!-- Search -->
+            <input
+                type="text"
+                name="search"
+                class="search-input"
+                placeholder="Search student..."
+                value="{{ request.GET.search }}"
+            >
+
+
+            <!-- Course -->
+            <select
+                name="course"
+                class="filter-select"
+            >
+
+                <option value="">
+                    All Courses
+                </option>
+
+                {% for course in courses %}
+
+                    <option
+                        value="{{ course.id }}"
+                        {% if request.GET.course == course.id|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ course.code }} · {{ course.name }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <!-- Status -->
+            <select
+                name="status"
+                class="filter-select"
+            >
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option
+                    value="present"
+                    {% if request.GET.status == "present" %}
+                        selected
+                    {% endif %}
+                >
+                    Present
+                </option>
+
+                <option
+                    value="absent"
+                    {% if request.GET.status == "absent" %}
+                        selected
+                    {% endif %}
+                >
+                    Absent
+                </option>
+
+                <option
+                    value="late"
+                    {% if request.GET.status == "late" %}
+                        selected
+                    {% endif %}
+                >
+                    Late
+                </option>
+
+            </select>
+
+
+            <!-- Date -->
+            <input
+                type="date"
+                name="date"
+                class="form-input"
+                value="{{ request.GET.date }}"
+            >
+
+
+            <button
+                type="submit"
+                class="btn btn-primary btn-sm"
+            >
+                Filter
+            </button>
+
+
+            <a
+                href="{% url 'attendance:attendance_history' %}"
+                class="btn btn-ghost btn-sm"
+            >
+                Clear
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- History Table -->
+    <div class="table-wrap">
+
+        {% if attendance %}
+
+            <table class="catalog">
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Student</th>
+                        <th>Student ID</th>
+                        <th>Course</th>
+                        <th>Instructor</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for record in attendance %}
+
+                        <tr>
+
+                            <!-- Date -->
+                            <td data-label="Date">
+
+                                <span class="stamp">
+                                    {{ record.date|date:"d M Y" }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- Student -->
+                            <td data-label="Student">
+
+                                <div class="course-name">
+                                    {{ record.student.name }}
+                                </div>
+
+                                {% if record.student.email %}
+
+                                    <div class="course-dept">
+                                        {{ record.student.email }}
+                                    </div>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Student ID -->
+                            <td data-label="Student ID">
+
+                                {{ record.student.student_id }}
+
+                            </td>
+
+
+                            <!-- Course -->
+                            <td data-label="Course">
+
+                                <div class="course-name">
+                                    {{ record.course.name }}
+                                </div>
+
+                                <div class="course-dept">
+                                    {{ record.course.code }}
+                                </div>
+
+                            </td>
+
+
+                            <!-- Instructor -->
+                            <td data-label="Instructor">
+
+                                {% if record.course.instructor %}
+
+                                    {{ record.course.instructor.full_name }}
+
+                                {% else %}
+
+                                    <span class="course-dept">
+                                        Not Assigned
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Status -->
+                            <td data-label="Status">
+
+                                {% if record.status == "present" %}
+
+                                    <span class="pill active">
+                                        Present
+                                    </span>
+
+                                {% elif record.status == "absent" %}
+
+                                    <span class="pill inactive">
+                                        Absent
+                                    </span>
+
+                                {% elif record.status == "late" %}
+
+                                    <span
+                                        class="pill"
+                                        style="
+                                            background:#F3E7D0;
+                                            color:#8A6418;
+                                        "
+                                    >
+                                        Late
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h3>
+                    No attendance records found
+                </h3>
+
+                <p>
+                    There are no attendance records matching your filters.
+                </p>
+
+                <a
+                    href="{% url 'attendance:take_attendance' %}"
+                    class="btn btn-primary"
+                >
+                    Take Attendance
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</main>
+
+{% endblock content %}

@@ -21,6 +21,18 @@ class LoginForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
+
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Choose a username",
+                "autocomplete": "username",
+            }
+        )
+    )
+
+
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={
@@ -30,15 +42,35 @@ class RegisterForm(UserCreationForm):
         })
     )
 
-class Meta:
-    model = User
-    fields = ['username', 'email', 'password1', 'password2']
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Create a password",
+                "autocomplete": "new-password",
+            }
+        )
+    )
 
-    widgets = {
-        'username': forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Choose a username',
-            'autocomplete': 'username',
-        }),
-    }
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Confirm your password",
+                "autocomplete": "new-password",
+            }
+        )
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Choose a username',
+                'autocomplete': 'username',
+            }),
+        }
 

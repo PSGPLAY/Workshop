@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+
+{% block title %}Take Attendance · MMAMC{% endblock %}
+
+{% block page %}attendance{% endblock %}
+
+{% block content %}
+
+<main>
+
+    <!-- Page Header -->
+    <div class="page-head">
+        <div>
+            <p class="eyebrow">Registrar · Attendance</p>
+
+            <h1>Take Attendance</h1>
+
+            <p class="lede">
+                Mark attendance for students enrolled in a course.
+            </p>
+        </div>
+
+        <div>
+            <a href="{% url 'attendance:attendance' %}" class="btn btn-ghost">
+                ← Attendance
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Course Selection -->
+    <div class="card card-pad">
+
+        <form method="GET">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="course">Course</label>
+
+                    <select
+                        name="course"
+                        id="course"
+                        class="form-input"
+                        onchange="this.form.submit()"
+                    >
+                        <option value="">
+                            Select a course
+                        </option>
+
+                        {% for course in courses %}
+
+                            <option
+                                value="{{ course.id }}"
+                                {% if selected_course and selected_course.id == course.id %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ course.code }} · {{ course.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date</label>
+
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        class="form-input"
+                        value="{{ selected_date|date:'Y-m-d' }}"
+                    >
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    {% if selected_course %}
+
+        <!-- Selected Course -->
+        <div class="page-head" style="margin-top: 32px;">
+
+            <div>
+
+                <p class="eyebrow">
+                    {{ selected_course.code }}
+                </p>
+
+                <h2>
+                    {{ selected_course.name }}
+                </h2>
+
+                <p class="lede">
+                    {{ selected_course.department }}
+                    ·
+                    {{ selected_course.credits }} Credits
+                </p>
+
+            </div>
+
+            <span class="stamp teal">
+                {{ selected_date|date:"d M Y" }}
+            </span>
+
+        </div>
+
+
+        <!-- Attendance Form -->
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="course"
+                value="{{ selected_course.id }}"
+            >
+
+            <input
+                type="hidden"
+                name="date"
+                value="{{ selected_date|date:'Y-m-d' }}"
+            >
+
+
+            <div class="table-wrap">
+
+                {% if students %}
+
+                    <table class="catalog">
+
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Student ID</th>
+                                <th>Program</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for student in students %}
+
+                                <tr>
+
+                                    <!-- Student -->
+                                    <td data-label="Student">
+
+                                        <div class="course-name">
+                                            {{ student.name }}
+                                        </div>
+
+                                        {% if student.email %}
+
+                                            <div class="course-dept">
+                                                {{ student.email }}
+                                            </div>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Student ID -->
+                                    <td data-label="Student ID">
+
+                                        <span class="stamp">
+                                            {{ student.student_id }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Program -->
+                                    <td data-label="Program">
+
+                                        <div class="course-name">
+                                            {{ student.program }}
+                                        </div>
+
+                                        <div class="course-dept">
+                                            {{ student.department }}
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- Status -->
+                                    <td data-label="Status">
+
+                                        <select
+                                            name="status_{{ student.id }}"
+                                            class="filter-select"
+                                        >
+
+                                            <option
+                                                value="present"
+                                                {% if student.attendance_status == "present" %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Present
+                                            </option>
+
+                                            <option
+                                                value="absent"
+                                                {% if student.attendance_status == "absent" %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Absent
+                                            </option>
+
+                                            <option
+                                                value="late"
+                                                {% if student.attendance_status == "late" %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Late
+                                            </option>
+
+                                        </select>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        <h3>No students enrolled</h3>
+
+                        <p>
+                            There are no enrolled students for this course.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            {% if students %}
+
+                <div
+                    style="
+                        display:flex;
+                        justify-content:flex-end;
+                        margin-top:24px;
+                    "
+                >
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Save Attendance
+                    </button>
+
+                </div>
+
+            {% endif %}
+
+        </form>
+
+    {% else %}
+
+        <!-- No Course Selected -->
+        <div class="empty-state" style="margin-top:32px;">
+
+            <h3>Select a course</h3>
+
+            <p>
+                Choose a course above to load its enrolled students.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</main>
+
+{% endblock content %}

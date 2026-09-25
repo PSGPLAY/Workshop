@@ -47,7 +47,7 @@
         {% if user.is_authenticated %}
 
         <div>
-           <a href="{% url 'profile' %}" class="profile-link">
+           <a href="{% url 'home:profile' %}" class="profile-link">
           <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'images/default_profile.png' %}{% endif %}"
                alt="Profile Picture"
                class="profile-picture">

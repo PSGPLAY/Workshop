@@ -862,6 +862,106 @@ table.catalog tbody tr:hover{ background: #FAFAF7; }
   margin-bottom: 20px;
 }
 
+.auth-card {
+    max-width: 620px;
+    margin: 32px auto;
+}
+
+.auth-card form {
+    width: 100%;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field.span-2 {
+    grid-column: span 2;
+}
+
+.field label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #243238;
+}
+
+.form-control {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #d6dfe2;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #243238;
+    font-size: 15px;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-control::placeholder {
+    color: #9aa8ad;
+}
+
+.form-control:focus {
+    border-color: #168b8b;
+    box-shadow: 0 0 0 3px rgba(22, 139, 139, 0.12);
+}
+
+.field-error,
+.form-error {
+    color: #b42318;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.form-error {
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: #fff1f0;
+    border: 1px solid #f2c4c0;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+@media (max-width: 600px) {
+
+    .auth-card {
+        margin: 20px 0;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.span-2 {
+        grid-column: span 1;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+
+
 @media (max-width: 860px){
   .hero-inner{ grid-template-columns: 1fr; }
   .hero h1{ max-width: none; font-size: 34px; }

@@ -17,8 +17,8 @@ def courses(request):
     })
 
 
-def course_details(request, id):
-    course = Course.objects.get(id=id)
+def course_details(request, course_id):
+    course = Course.objects.get(id=course_id)
 
     return render(request, "course-details.html", {
         "course": course

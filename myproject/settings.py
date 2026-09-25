@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     "tasks",
     "corsheaders",
     'rest_framework_simplejwt',
+    'attendance',
+    'fee',
 
 ]
 
@@ -96,9 +98,12 @@ DATABASES = {
     }
 }
 
-LOGIN_URL = '/accounts/login/'
-REGISTER_URL = '/accounts/register/'
-LOGOUT_URL = '/accounts/logout/'
+LOGIN_URL = "accounts:login"
+
+LOGIN_REDIRECT_URL = "home:home"
+
+LOGOUT_REDIRECT_URL = "accounts:login"
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

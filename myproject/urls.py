@@ -20,6 +20,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('api/', include('api.urls')),
     path('tasks/', include('tasks.urls')),
+    path('attendance/', include('attendance.urls')),
 
     # OpenAPI schema
     path(

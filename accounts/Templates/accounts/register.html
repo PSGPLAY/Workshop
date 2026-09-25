@@ -6,56 +6,146 @@ Register - MMAMC
 
 {% block content %}
 
-<div class="login-container">
+<main>
+    <div class="page-head">
 
-    <div class="login-box">
+    <div>
 
-        <h2>Create Account</h2>
+        <p class="eyebrow">
+            Get started
+        </p>
 
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
+        <h1>
+            Create Account
+        </h1>
 
-        <form method="POST">
-
-            {% csrf_token %}
-
-            <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                required
-            >
-
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-            >
-
-            <input
-                type="password"
-                name="confirm_password"
-                placeholder="Confirm Password"
-                required
-            >
-
-            <button type="submit">
-                Register
-            </button>
-
-        </form>
-
-        <p>
-            Already have an account?
-            <a href="{% url 'accounts:login' %}">
-                Sign In
-            </a>
+        <p class="lede">
+            Create an account to access the MMAMC Management System.
         </p>
 
     </div>
 
 </div>
+
+
+<div class="card card-pad auth-card">
+
+    <form method="POST" novalidate>
+
+        {% csrf_token %}
+
+
+        {% if form.non_field_errors %}
+
+            <div class="form-error">
+                {{ form.non_field_errors }}
+            </div>
+
+        {% endif %}
+
+
+        <div class="form-grid">
+
+            <!-- Username -->
+
+            <div class="field span-2">
+
+                <label for="{{ form.username.id_for_label }}">
+                    Username
+                </label>
+
+                {{ form.username }}
+
+                {% if form.username.errors %}
+                    <div class="field-error">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="field span-2">
+
+                <label for="{{ form.email.id_for_label }}">
+                    Email Address
+                </label>
+
+                {{ form.email }}
+
+                {% if form.email.errors %}
+                    <div class="field-error">
+                        {{ form.email.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="field span-2">
+
+                <label for="{{ form.password1.id_for_label }}">
+                    Password
+                </label>
+
+                {{ form.password1 }}
+
+                {% if form.password1.errors %}
+                    <div class="field-error">
+                        {{ form.password1.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- Confirm Password -->
+
+            <div class="field span-2">
+
+                <label for="{{ form.password2.id_for_label }}">
+                    Confirm Password
+                </label>
+
+                {{ form.password2 }}
+
+                {% if form.password2.errors %}
+                    <div class="field-error">
+                        {{ form.password2.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                Create Account
+            </button>
+
+            <a
+                href="{% url 'accounts:login' %}"
+                class="btn btn-ghost"
+            >
+                Sign In
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+</main>
 
 {% endblock %}
